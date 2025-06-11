@@ -22,7 +22,10 @@ jobs:
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: update Version in package.json
-        shell: bash
+        env:
+          # GITHUB_REF: ${{ github.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          shell: bash
         run: |
           npm i
           echo "npm version $(npm -v)"
