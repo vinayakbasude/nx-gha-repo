@@ -1,7 +1,6 @@
 name: Deployment to Dev environment
-on: 
-  - pull_request
-  - workflow_dispatch
+on: [workflow_dispatch, pull_request]
+
 jobs:
   bump_version:
     name: Bump Version change
