@@ -22,7 +22,7 @@ jobs:
           npm i
           echo 'npm version $(npm -v)'
           # Get the triggered branch name
-          TRIGGERED_BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
+          TRIGGERED_BRANCH=$(echo "${GITHUB_REF#refs/main/}")
           # Generate a unique branch name (e.g., bump-rc-versions-timestamp)
           NEW_BRANCH_NAME="bump-rc-versions-$(date +"%Y-%m-%d")-${{ github.run_number }}"
           git checkout -b $NEW_BRANCH_NAME
