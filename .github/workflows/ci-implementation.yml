@@ -1,34 +1,54 @@
 name: Deployment to Dev environment
-on: pull_request
+on: [workflow_dispatch, pull_request]
+
 jobs:
   bump_version:
-    name: Bump Version
+    name: Bump Version change
     runs-on: ubuntu-latest
+    env:
+      RUN_NUMBER: ${{ github.run_number }}
     steps:
       - name: Update the Version
         #run: echo 'Bumping version...'
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           refs: '.'
           token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Configure git
         run: |
-          git config --global user.name "github-actions"
-          git config --global user.email "custom-github@yahoo.in"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: update Version in package.json
         run: |
           npm i
-          echo 'npm version $(npm -v)'
-          # Get the triggered branch name
-          TRIGGERED_BRANCH=$(echo "${GITHUB_REF#refs/heads/}")
-          # Generate a unique branch name (e.g., bump-rc-versions-timestamp)
-          NEW_BRANCH_NAME="bump-rc-versions-$(date +"%Y-%m-%d")-${{ github.run_number }}"
-          git checkout -b $NEW_BRANCH_NAME
-          node -e 'const fs = require("fs"); const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8")); packageJson.version = "1.0.0"; fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));'
+          echo "npm version $(npm -v)"
+
+          TRIGGERED_BRANCH=$(echo "${GITHUB_BASE_REF#refs/heads/}")
+
+          NEW_BRANCH_NAME="bump-rc-versions-$(date +"%Y-%m-%d")-${RUN_NUMBER}"
+
+          git checkout -b "$NEW_BRANCH_NAME"
+
+          node -e '
+            const fs = require("fs");
+            const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            packageJson.version = "1.0.0";
+            fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
+          '
+
           git add .
           git commit -m "Bump version to 1.0.0"
-          git push origin HEAD:refs/heads/bump-version
-           gh pr create --base "$TRIGGERED_BRANCH" --head "$NEW_BRANCH_NAME" --title "Bump RC versions" --body "Automated bump of RC versions."
+
+          git push origin "$NEW_BRANCH_NAME"
+          
+          gh pr create --base "$TRIGGERED_BRANCH" --head "$NEW_BRANCH_NAME" --title "Bump RC versions" --body "Automated bump of RC versions."
+        shell: bash
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   publish_to_repo:
     name: Publish to Repo
@@ -37,6 +57,7 @@ jobs:
     steps:
       - name: Publish to Jfrog
         run: echo 'Publishing to Jfrog...'
+
   update_packages_on_bb:
     name: Update packages & create a branch on BB
     needs: [bump_version, publish_to_repo]
