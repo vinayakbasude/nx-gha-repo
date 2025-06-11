@@ -9,6 +9,7 @@ jobs:
         run: echo 'Bumping version...'
   publish_to_repo:
     name: Publish to Repo
+    needs: bump_version
     runs-on: ubuntu-latest
     steps:
       - name: Publish to Jfrog
