@@ -1,5 +1,7 @@
 name: Deployment to Dev environment
-on: pull_request
+on: 
+  - pull_request
+  - workflow_dispatch
 jobs:
   bump_version:
     name: Bump Version change
@@ -15,9 +17,6 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "custom-github@yahoo.in"
-      - name: Authenticate GH CLI
-        run: |
-          echo "${{ secrets.BOT_SECURITY_KEY }}" | gh auth login --with-token
       - name: update Version in package.json
         run: |
           npm i
