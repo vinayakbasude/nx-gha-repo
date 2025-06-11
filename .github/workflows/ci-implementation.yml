@@ -32,7 +32,10 @@ jobs:
           git commit -m "Bump version to 1.0.0"
           git push origin HEAD:refs/heads/bump-version
           gh pr create --base "$TRIGGERED_BRANCH" --head "$NEW_BRANCH_NAME" --title "Bump RC versions" --body "Automated bump of RC versions."
-
+        shell: bash
+        env:
+          GITHUB_REF: ${{ github.ref }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   publish_to_repo:
     name: Publish to Repo
     needs: bump_version
