@@ -23,7 +23,7 @@ jobs:
       - name: Pull before pushing
         run: |
           git pull origin test-pr-gha --rebase
-          git push origin your-branch-name
+          git push origin test-pr-gha
       - name: update Version in package.json
         run: |
           npm i
