@@ -47,7 +47,7 @@ jobs:
           git add .
           git commit -m "Bump version to 1.1.0"
 
-          echo 'triggered branch ${TRIGGERED_BRANCH} ${GITHUB_REF}'
+          echo basename -s .git `git config --get remote.origin.url`
 
           git push origin "$NEW_BRANCH_NAME"
 
