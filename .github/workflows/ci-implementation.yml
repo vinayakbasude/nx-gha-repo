@@ -15,11 +15,11 @@ jobs:
           fetch-depth: 0
           repository: 'vinayakbasude/nodejs'
           refs: '.'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.CROSS_REPO_PAT }}
 
       - name: Configure git
         run: |
-          git config --global user.name "VinayakBasude[bot]"
+          git config --global user.name "VinayakBasude"
           git config --global user.email "vinaybasude@yahoo.in"
 
       - name: update Version in package.json
