@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
           repository: 'vinayakbasude/vinayakbasude'
           refs: '.'
-          token: ${{ secrets.ACCOUNT_PERMISSION }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure git
         run: |
@@ -25,7 +25,7 @@ jobs:
       - name: update Version in package.json
         env:
           # GITHUB_REF: ${{ github.ref }}
-          GITHUB_TOKEN: ${{ secrets.ACCOUNT_PERMISSION }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           shell: bash
         run: |
           npm i
