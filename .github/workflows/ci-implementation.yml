@@ -13,7 +13,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          repository: 'vinayakbasude/vinayakbasude'
+          repository: 'vinayakbasude/nodejs'
           refs: '.'
           token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -40,12 +40,12 @@ jobs:
           node -e '
             const fs = require("fs");
             const packageJson = JSON.parse(fs.readFileSync("package.json", "utf8"));
-            packageJson.version = "1.0.0";
+            packageJson.version = "1.1.0";
             fs.writeFileSync("package.json", JSON.stringify(packageJson, null, 2));
           '
 
           git add .
-          git commit -m "Bump version to 1.0.0"
+          git commit -m "Bump version to 1.1.0"
 
           echo 'triggered branch ${TRIGGERED_BRANCH} ${GITHUB_REF}'
 
