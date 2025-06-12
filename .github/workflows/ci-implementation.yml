@@ -15,7 +15,7 @@ jobs:
           fetch-depth: 0
           repository: 'vinayakbasude/vinayakbasude'
           refs: '.'
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.ACCOUNT_PERMISSION }}
 
       - name: Configure git
         run: |
